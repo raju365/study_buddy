@@ -32,9 +32,9 @@ app.get("/", (req, res) => {
 
 // Routes will be mounted here as we build them
 app.use("/api/auth", require("./routes/auth.routes"));
-// app.use("/api/doubts", require("./routes/doubt.routes"));
-// app.use("/api/rooms", require("./routes/room.routes"));
 
+// app.use("/api/rooms", require("./routes/room.routes"));
+app.use("/api/doubts", require("./routes/doubt.routes"));
 /*
  * 404 handler — no matching route found
  */
