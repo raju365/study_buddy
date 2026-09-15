@@ -30,7 +30,7 @@ Use a short example if it helps. Avoid unnecessary jargon.`;
  */
 async function generateDoubtAnswer({ subject, topic, question }) {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
 
     const prompt = buildPrompt({ subject, topic, question });
 
