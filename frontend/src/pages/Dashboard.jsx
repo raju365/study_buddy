@@ -1,0 +1,5 @@
+
+// frontend/src/pages/Dashboard.jsx
+export default function Dashboard() {
+  return <div className="p-6">Dashboard page — coming next</div>;
+}
