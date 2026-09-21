@@ -13,6 +13,8 @@ import DoubtSolver from "./pages/DoubtSolver";
 import StudyRooms from "./pages/StudyRooms";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import StudyRoom from "./pages/StudyRoom";
+import Layout from "./components/common/Layout";
 
 export default function AppRoutes() {
   return (
@@ -24,7 +26,10 @@ export default function AppRoutes() {
         path="/"
         element={
           <ProtectedRoute>
+            <Layout>
+
             <DoubtSolver />
+            </Layout>
           </ProtectedRoute>
         }
       />
@@ -32,7 +37,19 @@ export default function AppRoutes() {
         path="/rooms"
         element={
           <ProtectedRoute>
-            <StudyRooms />
+            <Layout>
+              <StudyRooms />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/rooms/:roomId"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <StudyRoom />
+            </Layout>
           </ProtectedRoute>
         }
       />
@@ -40,7 +57,9 @@ export default function AppRoutes() {
         path="/dashboard"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <Layout>
+              <Dashboard />
+            </Layout>
           </ProtectedRoute>
         }
       />

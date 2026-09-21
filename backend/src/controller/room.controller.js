@@ -9,7 +9,7 @@
  */
 
 const roomModel = require("../model/room.model");
-
+const messageModel = require("../model/message.model");
 /*
  * Find an active room for a topic, or create one.
  * This is what the "Join live room" button calls.
@@ -58,5 +58,20 @@ async function getActiveRooms(req, res) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 }
+async function getRoomMessages(req, res) {
+  try {
+    const { roomId } = req.params;
 
-module.exports = { findOrCreateRoom, getActiveRooms };
+    const messages = await messageModel
+      .find({ room: roomId })
+      .populate("sender", "fullName")
+      .sort({ createdAt: 1 });
+
+    return res.status(200).json({ messages });
+  } catch (error) {
+    console.error("Get Room Messages Error:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+module.exports = { findOrCreateRoom, getActiveRooms, getRoomMessages };

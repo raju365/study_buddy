@@ -12,7 +12,7 @@ const jwt = require("jsonwebtoken");
 const cookie = require("cookie");
 const userModel = require("../model/user.model");
 const roomModel = require("../model/room.model");
-
+const messageModel = require("../model/message.model");
 function initSocket(server) {
   const io = new Server(server, {
     cors: {
@@ -27,7 +27,7 @@ function initSocket(server) {
    */
   io.use(async (socket, next) => {
     try {
-      const cookies = cookie.parse(socket.handshake.headers.cookie || "");
+      const cookies = cookie.parseCookie(socket.handshake.headers.cookie || "");
       const token = cookies.token;
 
       if (!token) {
@@ -73,12 +73,18 @@ function initSocket(server) {
     /*
      * Broadcast a chat message to everyone in the room
      */
-    socket.on("room:message", ({ roomId, message }) => {
+    socket.on("room:message", async ({ roomId, message }) => {
+      const saved = await messageModel.create({
+        room: roomId,
+        sender: socket.user._id,
+        message,
+      });
+
       io.to(roomId).emit("room:message", {
         senderId: socket.user._id,
         senderName: socket.user.fullName.firstName,
         message,
-        sentAt: new Date(),
+        sentAt: saved.createdAt,
       });
     });
 

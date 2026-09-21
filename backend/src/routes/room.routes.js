@@ -13,5 +13,5 @@ router.post("/find-or-create", authUser, roomControllers.findOrCreateRoom);
  * GET /api/rooms/active
  */
 router.get("/active", authUser, roomControllers.getActiveRooms);
-
+router.get("/:roomId/messages", authUser, roomControllers.getRoomMessages);
 module.exports = router;
