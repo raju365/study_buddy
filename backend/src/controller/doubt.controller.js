@@ -16,13 +16,13 @@ const { generateDoubtAnswer } = require("../service/ai.service");
  */
 async function askDoubt(req, res) {
   try {
-    const { subject, topic, question } = req.body;
+    const { subject, question } = req.body;   // topic hata diya from input
 
-    if (!subject || !topic || !question) {
+    if (!subject || !question) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const answer = await generateDoubtAnswer({ subject, topic, question });
+    const { topic, answer } = await generateDoubtAnswer({ subject, question });
 
     const doubt = await doubtModel.create({
       user: req.user._id,
@@ -32,7 +32,6 @@ async function askDoubt(req, res) {
       answer,
     });
 
-    // Find other students who asked about the same topic in the last 30 mins
     const thirtyMinsAgo = new Date(Date.now() - 30 * 60 * 1000);
 
     const peersOnSameTopic = await doubtModel
@@ -50,7 +49,6 @@ async function askDoubt(req, res) {
     });
   } catch (error) {
     console.error("Ask Doubt Error:", error);
-
     return res.status(500).json({ message: "Internal Server Error" });
   }
 }

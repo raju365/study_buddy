@@ -1,21 +1,12 @@
-/*
- * -------------------------------------------------------
- * File : Navbar.jsx
- * Description : Top navigation bar — links between
- *               Doubt Solver, Rooms, Dashboard + logout
- * Author : Raju Barman
- * -------------------------------------------------------
- */
-
 import { NavLink, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
-import { Lightbulb, MessageCircle, Users, LayoutDashboard, LogOut } from "lucide-react";
+import { GraduationCap, MessageCircle, Users, LayoutGrid, LogOut, Moon } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
 const links = [
   { to: "/", label: "Doubt Solver", icon: MessageCircle },
   { to: "/rooms", label: "Rooms", icon: Users },
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/dashboard", label: "Dashboard", icon: LayoutGrid },
 ];
 
 export default function Navbar() {
@@ -28,26 +19,26 @@ export default function Navbar() {
   }
 
   return (
-    <div className="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-[#ECEAFB]">
-      <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div className="bg-white border-b border-[#EEECFB]">
+      <div className="max-w-6xl mx-auto px-6 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-[#7F77DD] flex items-center justify-center">
-            <Lightbulb className="w-4 h-4 text-white" />
+          <div className="w-8 h-8 rounded-lg bg-[#6D5FE0] flex items-center justify-center">
+            <GraduationCap className="w-4.5 h-4.5 text-white" />
           </div>
-          <span className="text-sm font-medium">Study Buddy</span>
+          <span className="text-lg font-bold text-[#1B1834]">
+            Study <span className="text-[#6D5FE0]">Buddy</span>
+          </span>
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 bg-[#F6F5FE] rounded-full p-1">
           {links.map(({ to, label, icon: Icon }) => (
             <NavLink
               key={to}
               to={to}
               end={to === "/"}
               className={({ isActive }) =>
-                `relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                  isActive
-                    ? "text-[#3C3489]"
-                    : "text-muted-foreground hover:text-foreground"
+                `relative flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  isActive ? "text-[#6D5FE0]" : "text-[#6B6483] hover:text-[#1B1834]"
                 }`
               }
             >
@@ -56,27 +47,28 @@ export default function Navbar() {
                   {isActive && (
                     <motion.div
                       layoutId="nav-pill"
-                      className="absolute inset-0 bg-[#EEEDFE] rounded-full"
+                      className="absolute inset-0 bg-white rounded-full shadow-sm"
                       transition={{ type: "spring", duration: 0.4 }}
                     />
                   )}
-                  <Icon className="w-3.5 h-3.5 relative z-10" />
-                  <span className="relative z-10 hidden sm:inline">{label}</span>
+                  <Icon className="w-4 h-4 relative z-10" />
+                  <span className="relative z-10">{label}</span>
                 </>
               )}
             </NavLink>
           ))}
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground hidden sm:inline">
-            {user?.fullName?.firstName}
-          </span>
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-[#1B1834] font-medium">{user?.fullName?.firstName}</span>
+          <button className="w-9 h-9 rounded-full bg-[#F6F5FE] flex items-center justify-center text-[#6B6483]">
+            <Moon className="w-4 h-4" />
+          </button>
           <button
             onClick={handleLogout}
-            className="w-7 h-7 rounded-full flex items-center justify-center text-muted-foreground hover:bg-[#FAECE7] hover:text-[#D85A30] transition-colors"
+            className="w-9 h-9 rounded-full flex items-center justify-center text-[#6B6483] hover:bg-[#FDEEF0] hover:text-[#E8637A] transition-colors"
           >
-            <LogOut className="w-3.5 h-3.5" />
+            <LogOut className="w-4 h-4" />
           </button>
         </div>
       </div>

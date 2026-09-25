@@ -13,8 +13,6 @@ import { motion, AnimatePresence } from "motion/react";
 import { ArrowLeft, Send, Users } from "lucide-react";
 import { useSocket } from "../hooks/useSocket";
 import { useAuth } from "../context/AuthContext";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import roomService from "../services/room.service";
 
 export default function StudyRoom() {
@@ -35,43 +33,34 @@ export default function StudyRoom() {
   async function loadHistory() {
     try {
       const data = await roomService.getRoomMessages(roomId);
-      const formatted = data.messages.map((m) => ({
-        senderId: m.sender._id,
-        senderName: m.sender.fullName.firstName,
-        message: m.message,
-        sentAt: m.createdAt,
-      }));
-      setMessages(formatted);
+      setMessages(
+        data.messages.map((m) => ({
+          senderId: m.sender._id,
+          senderName: m.sender.fullName.firstName,
+          message: m.message,
+        })),
+      );
     } catch (err) {
       console.error("Failed to load history:", err);
     }
   }
+
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
 
-    socket.on("connect", () => {
-      socket.emit("room:join", { roomId });
-    });
+    socket.on("connect", () => socket.emit("room:join", { roomId }));
 
     socket.on("room:memberJoined", ({ name }) => {
       setMembers((prev) => [...new Set([...prev, name])]);
-      setMessages((prev) => [
-        ...prev,
-        { system: true, content: `${name} joined the room` },
-      ]);
+      setMessages((prev) => [...prev, { system: true, content: `${name} joined the room` }]);
     });
 
     socket.on("room:memberLeft", () => {
-      setMessages((prev) => [
-        ...prev,
-        { system: true, content: `A student left the room` },
-      ]);
+      setMessages((prev) => [...prev, { system: true, content: `A student left the room` }]);
     });
 
-    socket.on("room:message", (msg) => {
-      setMessages((prev) => [...prev, msg]);
-    });
+    socket.on("room:message", (msg) => setMessages((prev) => [...prev, msg]));
 
     return () => {
       socket.emit("room:leave", { roomId });
@@ -89,28 +78,30 @@ export default function StudyRoom() {
   function handleSend(e) {
     e.preventDefault();
     if (!text.trim()) return;
-
     socketRef.current.emit("room:message", { roomId, message: text });
     setText("");
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF9FF] flex flex-col items-center px-4 py-6">
-      <div className="w-full max-w-2xl flex flex-col h-[85vh]">
-        <div className="flex items-center justify-between mb-4">
+    <div className="max-w-3xl mx-auto px-6 py-8">
+      <div className="bg-white rounded-3xl shadow-lg flex flex-col h-[78vh] overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#EEECFB]">
           <button
-            onClick={() => navigate("/")}
-            className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+            onClick={() => navigate("/rooms")}
+            className="flex items-center gap-1.5 text-sm text-[#6B6483] hover:text-[#1B1834] font-medium"
           >
             <ArrowLeft className="w-4 h-4" /> Back
           </button>
-          <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-            <Users className="w-4 h-4" />
+          <span className="text-sm font-semibold text-[#1B1834]">Live Study Room</span>
+          <div className="flex items-center gap-1.5 text-xs font-medium text-[#22B573] bg-[#E7F8EE] px-3 py-1.5 rounded-full">
+            <Users className="w-3.5 h-3.5" />
             {members.length + 1} in room
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto flex flex-col gap-2.5 pr-1">
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto px-6 py-5 flex flex-col gap-3 bg-[#FBFAFF]">
           <AnimatePresence initial={false}>
             {messages.map((msg, i) =>
               msg.system ? (
@@ -118,7 +109,7 @@ export default function StudyRoom() {
                   key={i}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-xs text-center text-muted-foreground my-1"
+                  className="text-xs text-center text-[#B4AFCB] my-1"
                 >
                   {msg.content}
                 </motion.p>
@@ -131,16 +122,14 @@ export default function StudyRoom() {
                   className={`flex ${msg.senderId === user?.id ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`text-sm px-3.5 py-2.5 max-w-[75%] rounded-2xl ${
+                    className={`text-sm px-4 py-2.5 max-w-[75%] rounded-2xl ${
                       msg.senderId === user?.id
-                        ? "bg-[#7F77DD] text-white rounded-br-sm"
-                        : "bg-white shadow-sm rounded-bl-sm"
+                        ? "bg-[#6D5FE0] text-white rounded-br-sm"
+                        : "bg-white shadow-sm text-[#1B1834] rounded-bl-sm"
                     }`}
                   >
                     {msg.senderId !== user?.id && (
-                      <p className="text-xs font-medium text-[#7F77DD] mb-0.5">
-                        {msg.senderName}
-                      </p>
+                      <p className="text-xs font-semibold text-[#6D5FE0] mb-0.5">{msg.senderName}</p>
                     )}
                     {msg.message}
                   </div>
@@ -151,19 +140,20 @@ export default function StudyRoom() {
           <div ref={bottomRef} />
         </div>
 
-        <form onSubmit={handleSend} className="flex gap-2 mt-3">
-          <Input
-            placeholder="Message the room..."
+        {/* Input */}
+        <form onSubmit={handleSend} className="flex gap-2 px-6 py-4 border-t border-[#EEECFB]">
+          <input
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="rounded-full"
+            placeholder="Message the room..."
+            className="flex-1 border border-[#EEECFB] rounded-full px-4 py-2.5 text-sm bg-[#FAFAFF] text-[#1B1834] placeholder:text-[#B4AFCB] outline-none"
           />
-          <Button
+          <button
             type="submit"
-            className="rounded-full w-10 h-10 p-0 bg-[#7F77DD] hover:bg-[#6c63c9]"
+            className="w-10 h-10 rounded-full bg-gradient-to-r from-[#7C6FEC] to-[#4F6FF0] flex items-center justify-center text-white flex-shrink-0"
           >
             <Send className="w-4 h-4" />
-          </Button>
+          </button>
         </form>
       </div>
     </div>
