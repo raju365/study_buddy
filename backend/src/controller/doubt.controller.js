@@ -16,24 +16,32 @@ const { generateDoubtAnswer } = require("../service/ai.service");
  */
 async function askDoubt(req, res) {
   try {
-    const { subject, question } = req.body;   // topic hata diya from input
+    const { subject, question, image } = req.body;
 
-    if (!subject || !question) {
-      return res.status(400).json({ message: "All fields are required" });
+    if (!subject) {
+      return res.status(400).json({ message: "Subject is required" });
+    }
+    if (!question && !image) {
+      return res
+        .status(400)
+        .json({ message: "Please type a question or attach an image" });
     }
 
-    const { topic, answer } = await generateDoubtAnswer({ subject, question });
+    const { topic, answer } = await generateDoubtAnswer({
+      subject,
+      question,
+      image,
+    });
 
     const doubt = await doubtModel.create({
       user: req.user._id,
       subject,
       topic,
-      question,
+      question: question || "[Image question]",
       answer,
     });
 
     const thirtyMinsAgo = new Date(Date.now() - 30 * 60 * 1000);
-
     const peersOnSameTopic = await doubtModel
       .find({
         subject,
@@ -43,10 +51,9 @@ async function askDoubt(req, res) {
       })
       .distinct("user");
 
-    return res.status(201).json({
-      doubt,
-      peersStuckOnTopic: peersOnSameTopic.length,
-    });
+    return res
+      .status(201)
+      .json({ doubt, peersStuckOnTopic: peersOnSameTopic.length });
   } catch (error) {
     console.error("Ask Doubt Error:", error);
     return res.status(500).json({ message: "Internal Server Error" });
