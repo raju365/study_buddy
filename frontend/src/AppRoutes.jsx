@@ -15,20 +15,20 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import StudyRoom from "./pages/StudyRoom";
 import Layout from "./components/common/Layout";
+import Profile from "./pages/Profile";
+import ForgotPassword from "./pages/ForgotPassword";
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-
       <Route
         path="/"
         element={
           <ProtectedRoute>
             <Layout>
-
-            <DoubtSolver />
+              <DoubtSolver />
             </Layout>
           </ProtectedRoute>
         }
@@ -63,6 +63,18 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Profile />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route path="/forgot-password" element={<ForgotPassword />} />
     </Routes>
   );
 }

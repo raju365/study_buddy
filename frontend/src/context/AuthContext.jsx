@@ -51,10 +51,15 @@ export function AuthProvider({ children }) {
     await authService.logoutUser();
     setUser(null);
   }
+  async function updateProfile(data) {
+  const res = await authService.updateProfile(data);
+  setUser(res.user);
+  return res;
+}
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, register, login, logout, setUser }}
+      value={{ user, loading, register, login, logout, updateProfile, setUser }}
     >
       {children}
     </AuthContext.Provider>

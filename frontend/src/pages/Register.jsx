@@ -77,7 +77,7 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F3F1FE] relative overflow-hidden px-8 py-10">
+    <div className="min-h-screen bg-[#F3F1FE] dark:bg-[#15131F] relative overflow-hidden px-8 py-10">
       <StickyNote className="right-[4%] top-[10%] text-right">
         Good
         <br />
@@ -108,14 +108,14 @@ export default function Register() {
 
       <div className="max-w-5xl mx-auto flex items-center justify-between gap-16 flex-wrap">
         <div className="max-w-md">
-          <span className="inline-block text-xs font-medium text-[#6D5FE0] bg-white px-3 py-1.5 rounded-full mb-5">
+          <span className="inline-block text-xs font-medium text-[#6D5FE0] bg-white dark:bg-[#1E1B2E] dark:border dark:border-[#2E2A42] px-3 py-1.5 rounded-full mb-5">
             ✦ Learn · Solve · Grow
           </span>
-          <h1 className="text-5xl font-extrabold text-[#1B1834] leading-tight mb-5">
+          <h1 className="text-5xl font-extrabold text-[#1B1834] dark:text-white leading-tight mb-5">
             Start Your Learning Journey{" "}
             <span className="text-[#6D5FE0] underline decoration-4">today</span>
           </h1>
-          <p className="text-[#6B6483] text-base mb-8">
+          <p className="text-[#6B6483] dark:text-[#A39DC4] text-base mb-8">
             Join Study Buddy and get instant answers, collaborate in live rooms,
             and track your progress — all in one place.
           </p>
@@ -129,10 +129,12 @@ export default function Register() {
                   <f.icon className="w-5 h-5" style={{ color: f.color }} />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-[#1B1834]">
+                  <p className="text-sm font-semibold text-[#1B1834] dark:text-white">
                     {f.title}
                   </p>
-                  <p className="text-xs text-[#6B6483]">{f.desc}</p>
+                  <p className="text-xs text-[#6B6483] dark:text-[#A39DC4]">
+                    {f.desc}
+                  </p>
                 </div>
               </div>
             ))}
@@ -144,18 +146,18 @@ export default function Register() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
         >
-          <div className="w-[460px] bg-white rounded-3xl shadow-xl p-9">
-            <h2 className="text-xl font-bold text-[#1B1834] mb-1">
+          <div className="w-[460px] bg-white dark:bg-[#1E1B2E] dark:border dark:border-[#2E2A42] rounded-3xl shadow-xl dark:shadow-none p-9">
+            <h2 className="text-xl font-bold text-[#1B1834] dark:text-white mb-1">
               Create your account
             </h2>
-            <p className="text-sm text-[#6B6483] mb-6">
+            <p className="text-sm text-[#6B6483] dark:text-[#A39DC4] mb-6">
               Join Study Buddy and start solving doubts instantly.
             </p>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-sm font-medium text-[#1B1834] mb-1.5 block">
+                  <label className="text-sm font-medium text-[#1B1834] dark:text-white mb-1.5 block">
                     First name
                   </label>
                   <div className="relative">
@@ -171,7 +173,7 @@ export default function Register() {
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-[#1B1834] mb-1.5 block">
+                  <label className="text-sm font-medium text-[#1B1834] dark:text-white mb-1.5 block">
                     Last name
                   </label>
                   <Input
@@ -186,7 +188,7 @@ export default function Register() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-[#1B1834] mb-1.5 block">
+                <label className="text-sm font-medium text-[#1B1834] dark:text-white mb-1.5 block">
                   Email
                 </label>
                 <div className="relative">
@@ -204,7 +206,7 @@ export default function Register() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-[#1B1834] mb-1.5 block">
+                <label className="text-sm font-medium text-[#1B1834] dark:text-white mb-1.5 block">
                   Password
                 </label>
                 <div className="relative">
@@ -222,7 +224,7 @@ export default function Register() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-[#1B1834] mb-1.5 block">
+                <label className="text-sm font-medium text-[#1B1834] dark:text-white mb-1.5 block">
                   Grade / Class (optional)
                 </label>
                 <Input
