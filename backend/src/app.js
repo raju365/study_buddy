@@ -14,11 +14,16 @@ const cookieParser = require("cookie-parser");
 const app = express();
 
 // Core middlewares
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://studybuddy365.vercel.app",
+];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: allowedOrigins,
     credentials: true,
-  }),
+  })
 );
 app.use(express.json());
 app.use(cookieParser());
