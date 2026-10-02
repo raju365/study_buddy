@@ -13,6 +13,7 @@ const cookie = require("cookie");
 const userModel = require("../model/user.model");
 const roomModel = require("../model/room.model");
 const messageModel = require("../model/message.model");
+
 function initSocket(server) {
   const io = new Server(server, {
     cors: {
@@ -21,10 +22,6 @@ function initSocket(server) {
     },
   });
 
-  /*
-   * Authenticate socket connection using the same
-   * httpOnly JWT cookie used by REST routes
-   */
   io.use(async (socket, next) => {
     try {
       const cookies = cookie.parseCookie(socket.handshake.headers.cookie || "");
@@ -42,7 +39,6 @@ function initSocket(server) {
       }
 
       socket.user = user;
-
       next();
     } catch (error) {
       next(new Error("Unauthorized"));
@@ -52,10 +48,6 @@ function initSocket(server) {
   io.on("connection", (socket) => {
     console.log(`Socket connected: ${socket.user.fullName.firstName}`);
 
-    /*
-     * Join a study room — adds user to socket room
-     * and updates activeMembers in DB
-     */
     socket.on("room:join", async ({ roomId }) => {
       socket.join(roomId);
 
@@ -70,9 +62,6 @@ function initSocket(server) {
       });
     });
 
-    /*
-     * Broadcast a chat message to everyone in the room
-     */
     socket.on("room:message", async ({ roomId, message }) => {
       const saved = await messageModel.create({
         room: roomId,
@@ -88,9 +77,6 @@ function initSocket(server) {
       });
     });
 
-    /*
-     * Leave room — cleanup on explicit leave
-     */
     socket.on("room:leave", async ({ roomId }) => {
       socket.leave(roomId);
 
