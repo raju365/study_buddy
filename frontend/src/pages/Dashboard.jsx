@@ -122,15 +122,19 @@ export default function Dashboard() {
               className="border-0 dark:border dark:border-[#2E2A42]"
               style={{ background: c.bg }}
             >
-              <CardContent className="pt-5 pb-4 ">
+              <CardContent className="pt-5 pb-4">
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center mb-3"
                   style={{ background: c.iconBg }}
                 >
                   <c.icon className="w-5 h-5" style={{ color: c.color }} />
                 </div>
-                <p className="text-2xl font-bold text-[#1B1834] dark:text-white">{c.value}</p>
-                <p className="text-xs text-[#6B6483] dark:text-[#A39DC4] mb-2">{c.label}</p>
+                <p className="text-2xl font-bold" style={{ color: "#1B1834" }}>
+                  {c.value}
+                </p>
+                <p className="text-xs mb-2" style={{ color: "#6B6483" }}>
+                  {c.label}
+                </p>
                 <div className="flex items-center justify-between">
                   <span className="text-[11px]" style={{ color: c.color }}>
                     {c.sub}
