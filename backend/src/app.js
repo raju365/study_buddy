@@ -19,7 +19,7 @@ app.use(
     credentials: true,
   }),
 );
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api/doubts", require("./routes/doubt.routes"));
 app.use("/api/rooms", require("./routes/room.routes"));
-app.use(express.json({ limit: "10mb" }));
+
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
