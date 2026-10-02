@@ -17,6 +17,7 @@ import StudyRoom from "./pages/StudyRoom";
 import Layout from "./components/common/Layout";
 import Profile from "./pages/Profile";
 import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 export default function AppRoutes() {
   return (
@@ -75,6 +76,7 @@ export default function AppRoutes() {
       />
 
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
     </Routes>
   );
 }
